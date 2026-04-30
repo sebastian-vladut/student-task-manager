@@ -1,0 +1,23 @@
+services:
+  database:
+    image: postgres:13-alpine
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: student_task_manager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+  app:
+    build: .
+    container_name: student-task-manager-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/student_task_manager
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
